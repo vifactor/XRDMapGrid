@@ -1,7 +1,7 @@
 import wx
 
 class AxesPopupMenu(wx.Menu):
-    def __init__(self, axes = None):
+    def __init__(self, axes):
         wx.Menu.__init__(self)
         
         self.axes = axes
@@ -11,4 +11,4 @@ class AxesPopupMenu(wx.Menu):
         self.Bind(wx.EVT_MENU, self.onItem1, item)
         
     def onItem1(self, event):
-        print "Item1 has been chosen"
+        print "Item1 has been chosen", self.axes

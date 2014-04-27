@@ -59,7 +59,9 @@ class MplPanel(wx.Panel):
     def on_right_release(self, event):
         #only right button is considered
         if event.button == 3:
-            menu = AxesPopupMenu()
-            self.PopupMenu(menu)
-            menu.Destroy()
+            #only if click happened inside axes
+            if event.inaxes:
+                menu = AxesPopupMenu(event.inaxes)
+                self.PopupMenu(menu)
+                menu.Destroy()
 # end of class MplPanel
