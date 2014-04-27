@@ -18,11 +18,26 @@ class MainFrame(wx.Frame):
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.button = wx.Button(self, -1, "Show dialog")
+        
+        # Menu Bar
+        self.menubar = wx.MenuBar()
+        self.File = wx.Menu()
+        self.Close = wx.MenuItem(self.File, wx.ID_CLOSE, "Close", "Close program", wx.ITEM_NORMAL)
+        self.File.AppendItem(self.Close)
+        self.menubar.Append(self.File, "File")
+        self.Help = wx.Menu()
+        self.About = wx.MenuItem(self.Help, wx.ID_ABOUT, "About", "Information about this program", wx.ITEM_NORMAL)
+        self.Help.AppendItem(self.About)
+        self.menubar.Append(self.Help, "Help")
+        self.SetMenuBar(self.menubar)
+        # Menu Bar end
 
         self.__set_properties()
         self.__do_layout()
 
         self.Bind(wx.EVT_BUTTON, self.onShowDialog, self.button)
+        self.Bind(wx.EVT_MENU, self.onClose, self.Close)
+        self.Bind(wx.EVT_MENU, self.onAbout, self.About)
         # end wxGlade
 
     def __set_properties(self):
@@ -47,5 +62,13 @@ class MainFrame(wx.Frame):
         
         dialog.Destroy()
         
+
+    def onClose(self, event):  # wxGlade: MainFrame.<event_handler>
+        print "Event handler `onClose' not implemented"
+        event.Skip()
+
+    def onAbout(self, event):  # wxGlade: MainFrame.<event_handler>
+        print "Event handler `onAbout' not implemented"
+        event.Skip()
 
 # end of class MainFrame
