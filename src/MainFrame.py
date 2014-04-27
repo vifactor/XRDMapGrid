@@ -5,6 +5,7 @@ import wx
 from AxesGridDialog import AxesGridDialog
 
 # begin wxGlade: dependencies
+from MplPanel import MplPanel
 # end wxGlade
 
 # begin wxGlade: extracode
@@ -25,7 +26,7 @@ class MainFrame(wx.Frame):
         self.File.AppendItem(self.Exit)
         self.menubar.Append(self.File, "&File")
         self.Options = wx.Menu()
-        self.SetGrid = wx.MenuItem(self.Options, wx.ID_ANY, "SetGrid", "Defined the size of the grid grid", wx.ITEM_NORMAL)
+        self.SetGrid = wx.MenuItem(self.Options, wx.ID_ANY, "Set grid", "Defined the size of the grid grid", wx.ITEM_NORMAL)
         self.Options.AppendItem(self.SetGrid)
         self.menubar.Append(self.Options, "&Options")
         self.Help = wx.Menu()
@@ -34,6 +35,7 @@ class MainFrame(wx.Frame):
         self.menubar.Append(self.Help, "&Help")
         self.SetMenuBar(self.menubar)
         # Menu Bar end
+        self.mplPanel = MplPanel(self, wx.ID_ANY)
 
         self.__set_properties()
         self.__do_layout()
@@ -52,6 +54,7 @@ class MainFrame(wx.Frame):
     def __do_layout(self):
         # begin wxGlade: MainFrame.__do_layout
         sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self.mplPanel, 1, wx.EXPAND, 0)
         self.SetSizer(sizer)
         self.Layout()
         # end wxGlade
