@@ -54,7 +54,7 @@ class MainFrame(wx.Frame):
     def __do_layout(self):
         # begin wxGlade: MainFrame.__do_layout
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.mplPanel, 1, wx.EXPAND, 0)
+        sizer.Add(self.mplPanel, 1, wx.ALL | wx.EXPAND, 5)
         self.SetSizer(sizer)
         self.Layout()
         # end wxGlade
