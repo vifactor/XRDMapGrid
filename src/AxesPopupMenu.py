@@ -1,5 +1,7 @@
 import wx
+import os
 import numpy as np
+import xrayutilities as xu
 
 class AxesPopupMenu(wx.Menu):
     def __init__(self, axes):
@@ -7,19 +9,37 @@ class AxesPopupMenu(wx.Menu):
         
         self.axes = axes
         
-        item = wx.MenuItem(self, wx.NewId(), "Plot")
+        item = wx.MenuItem(self, wx.NewId(), "Load file...")
         self.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.onPlot, item)
+        self.Bind(wx.EVT_MENU, self.onLoad, item)
         
         item = wx.MenuItem(self, wx.NewId(), "Clear")
         self.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.onClear, item)
         
-    def onPlot(self, event):
-        x = np.arange(0, 6, 0.01)
-        a = np.random.random(1)
-        y = np.sin(x**2)*np.exp(-a * x)
-        self.axes.plot(x, y)
+    def onLoad(self, event):
+        dlg = wx.FileDialog(None, "Choose a file", "", "", "*.xrdml", wx.OPEN)
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            #destroy dialog
+            dlg.Destroy()
+            
+            #read xrdml datafile
+            om, tt, psd = xu.io.getxrdml_map(path)
+                    
+            gridder = xu.Gridder2D(150,150)
+            gridder(om, tt, psd)
+            INT = xu.maplog(gridder.data.transpose(),6,0)
+
+            #clear axes from previous drawing
+            self.axes.clear()
+
+            #draw rsm
+            cf = self.axes.contourf(gridder.xaxis, gridder.yaxis,INT,100,extend='min')
+
+            #annotate axes
+            self.axes.set_xlabel(r'$\omega$ (deg)')
+            self.axes.set_ylabel(r'$2\theta$ (deg)')
         
     def onClear(self, event):
         self.axes.clear()
