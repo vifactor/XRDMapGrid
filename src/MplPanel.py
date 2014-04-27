@@ -6,6 +6,8 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 import matplotlib.gridspec as gridspec
 
+from AxesPopupMenu import AxesPopupMenu
+
 # begin wxGlade: dependencies
 # end wxGlade
 
@@ -21,10 +23,15 @@ class MplPanel(wx.Panel):
         kwds["style"] = wx.TAB_TRAVERSAL
         wx.Panel.__init__(self, *args, **kwds)
         self.canvas = FigureCanvas(self, wx.ID_ANY, self.figure)
-
+        
+        
         self.__set_properties()
         self.__do_layout()
         # end wxGlade
+        
+        #connect event for a popup menu
+        self.cidrelease = self.canvas.mpl_connect(
+            'button_release_event', self.on_right_release)
 
     def __set_properties(self):
         # begin wxGlade: MplPanel.__set_properties
@@ -40,6 +47,7 @@ class MplPanel(wx.Panel):
         # end wxGlade
         
     def set_grid(self, nr, nc):
+        self.figure.clear()
         #setup gridspec with the number of rows and columns given
         self.gridspec = gridspec.GridSpec(nr, nc)
         #add axis to each cell of the gridspec
@@ -47,4 +55,11 @@ class MplPanel(wx.Panel):
             self.figure.add_subplot(self.gridspec[i])
         
         self.canvas.draw()
+    
+    def on_right_release(self, event):
+        #only right button is considered
+        if event.button == 3:
+            menu = AxesPopupMenu()
+            self.PopupMenu(menu)
+            menu.Destroy()
 # end of class MplPanel
