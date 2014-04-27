@@ -17,7 +17,6 @@ class MainFrame(wx.Frame):
         # begin wxGlade: MainFrame.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
-        self.button = wx.Button(self, -1, "Show dialog")
         
         # Menu Bar
         self.menubar = wx.MenuBar()
@@ -39,7 +38,6 @@ class MainFrame(wx.Frame):
         self.__set_properties()
         self.__do_layout()
 
-        self.Bind(wx.EVT_BUTTON, self.onShowDialog, self.button)
         self.Bind(wx.EVT_MENU, self.onExit, self.Exit)
         self.Bind(wx.EVT_MENU, self.onSetGrid, self.SetGrid)
         self.Bind(wx.EVT_MENU, self.onAbout, self.About)
@@ -54,18 +52,9 @@ class MainFrame(wx.Frame):
     def __do_layout(self):
         # begin wxGlade: MainFrame.__do_layout
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.button, 0, wx.ALL | wx.ALIGN_BOTTOM | wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
         self.SetSizer(sizer)
         self.Layout()
         # end wxGlade
-
-    def onShowDialog(self, event):  # wxGlade: MainFrame.<event_handler>
-        dialog = AxesGridDialog(self)
-        
-        if dialog.ShowModal() == wx.ID_OK:
-            print "%s x %s grid has been defined" % (dialog.scNbRows.GetValue(), dialog.scNbColumns.GetValue())
-        
-        dialog.Destroy()
         
     def onAbout(self, event):  # wxGlade: MainFrame.<event_handler>
         #Create a message dialog box
@@ -77,7 +66,11 @@ class MainFrame(wx.Frame):
         self.Close(True)
 
     def onSetGrid(self, event):  # wxGlade: MainFrame.<event_handler>
-        print "Event handler `onSetGrid' not implemented"
-        event.Skip()
+        dialog = AxesGridDialog(self)
+        
+        if dialog.ShowModal() == wx.ID_OK:
+            print "%s x %s grid has been defined" % (dialog.scNbRows.GetValue(), dialog.scNbColumns.GetValue())
+        
+        dialog.Destroy()
 
 # end of class MainFrame
