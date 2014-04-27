@@ -26,7 +26,7 @@ class MainFrame(wx.Frame):
         self.File.AppendItem(self.Exit)
         self.menubar.Append(self.File, "&File")
         self.Options = wx.Menu()
-        self.SetGrid = wx.MenuItem(self.Options, wx.ID_ANY, "Set grid", "Defined the size of the grid grid", wx.ITEM_NORMAL)
+        self.SetGrid = wx.MenuItem(self.Options, wx.ID_PROPERTIES, "Set grid", "Defined the size of the grid grid", wx.ITEM_NORMAL)
         self.Options.AppendItem(self.SetGrid)
         self.menubar.Append(self.Options, "&Options")
         self.Help = wx.Menu()

@@ -23,8 +23,7 @@ class MplPanel(wx.Panel):
         kwds["style"] = wx.TAB_TRAVERSAL
         wx.Panel.__init__(self, *args, **kwds)
         self.canvas = FigureCanvas(self, wx.ID_ANY, self.figure)
-        
-        
+
         self.__set_properties()
         self.__do_layout()
         # end wxGlade

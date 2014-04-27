@@ -9,11 +9,11 @@ class AxesPopupMenu(wx.Menu):
         
         self.axes = axes
         
-        item = wx.MenuItem(self, wx.NewId(), "Load file...")
+        item = wx.MenuItem(self, wx.ID_OPEN, "Load file...")
         self.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.onLoad, item)
         
-        item = wx.MenuItem(self, wx.NewId(), "Clear")
+        item = wx.MenuItem(self, wx.ID_CLEAR, "Clear")
         self.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.onClear, item)
         
