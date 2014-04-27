@@ -22,13 +22,13 @@ class MainFrame(wx.Frame):
         # Menu Bar
         self.menubar = wx.MenuBar()
         self.File = wx.Menu()
-        self.Close = wx.MenuItem(self.File, wx.ID_CLOSE, "Close", "Close program", wx.ITEM_NORMAL)
-        self.File.AppendItem(self.Close)
-        self.menubar.Append(self.File, "File")
+        self.Exit = wx.MenuItem(self.File, wx.ID_EXIT, "E&xit", "Terminate the program", wx.ITEM_NORMAL)
+        self.File.AppendItem(self.Exit)
+        self.menubar.Append(self.File, "&File")
         self.Help = wx.Menu()
-        self.About = wx.MenuItem(self.Help, wx.ID_ABOUT, "About", "Information about this program", wx.ITEM_NORMAL)
+        self.About = wx.MenuItem(self.Help, wx.ID_ABOUT, "&About", "Information about this program", wx.ITEM_NORMAL)
         self.Help.AppendItem(self.About)
-        self.menubar.Append(self.Help, "Help")
+        self.menubar.Append(self.Help, "&Help")
         self.SetMenuBar(self.menubar)
         # Menu Bar end
 
@@ -36,7 +36,7 @@ class MainFrame(wx.Frame):
         self.__do_layout()
 
         self.Bind(wx.EVT_BUTTON, self.onShowDialog, self.button)
-        self.Bind(wx.EVT_MENU, self.onClose, self.Close)
+        self.Bind(wx.EVT_MENU, self.onExit, self.Exit)
         self.Bind(wx.EVT_MENU, self.onAbout, self.About)
         # end wxGlade
 
@@ -62,13 +62,13 @@ class MainFrame(wx.Frame):
         
         dialog.Destroy()
         
-
-    def onClose(self, event):  # wxGlade: MainFrame.<event_handler>
-        print "Event handler `onClose' not implemented"
-        event.Skip()
-
     def onAbout(self, event):  # wxGlade: MainFrame.<event_handler>
-        print "Event handler `onAbout' not implemented"
-        event.Skip()
+        #Create a message dialog box
+        dlg = wx.MessageDialog(self, "XRD MapGrid v0.1\nAuthor: Viktor Kopp", "XRD", wx.OK)
+        dlg.ShowModal()
+        dlg.Destroy()
+
+    def onExit(self, event):  # wxGlade: MainFrame.<event_handler>
+        self.Close(True)
 
 # end of class MainFrame
