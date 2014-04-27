@@ -25,6 +25,10 @@ class MainFrame(wx.Frame):
         self.Exit = wx.MenuItem(self.File, wx.ID_EXIT, "E&xit", "Terminate the program", wx.ITEM_NORMAL)
         self.File.AppendItem(self.Exit)
         self.menubar.Append(self.File, "&File")
+        self.Options = wx.Menu()
+        self.SetGrid = wx.MenuItem(self.Options, wx.ID_ANY, "SetGrid", "Defined the size of the grid grid", wx.ITEM_NORMAL)
+        self.Options.AppendItem(self.SetGrid)
+        self.menubar.Append(self.Options, "&Options")
         self.Help = wx.Menu()
         self.About = wx.MenuItem(self.Help, wx.ID_ABOUT, "&About", "Information about this program", wx.ITEM_NORMAL)
         self.Help.AppendItem(self.About)
@@ -37,6 +41,7 @@ class MainFrame(wx.Frame):
 
         self.Bind(wx.EVT_BUTTON, self.onShowDialog, self.button)
         self.Bind(wx.EVT_MENU, self.onExit, self.Exit)
+        self.Bind(wx.EVT_MENU, self.onSetGrid, self.SetGrid)
         self.Bind(wx.EVT_MENU, self.onAbout, self.About)
         # end wxGlade
 
@@ -70,5 +75,9 @@ class MainFrame(wx.Frame):
 
     def onExit(self, event):  # wxGlade: MainFrame.<event_handler>
         self.Close(True)
+
+    def onSetGrid(self, event):  # wxGlade: MainFrame.<event_handler>
+        print "Event handler `onSetGrid' not implemented"
+        event.Skip()
 
 # end of class MainFrame
