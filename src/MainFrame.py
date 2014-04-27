@@ -48,7 +48,7 @@ class MainFrame(wx.Frame):
     def __set_properties(self):
         # begin wxGlade: MainFrame.__set_properties
         self.SetTitle("Main Window")
-        self.SetSize((640, 480))
+        self.SetSize((650, 490))
         # end wxGlade
 
     def __do_layout(self):
@@ -72,7 +72,10 @@ class MainFrame(wx.Frame):
         dialog = AxesGridDialog(self)
         
         if dialog.ShowModal() == wx.ID_OK:
-            print "%s x %s grid has been defined" % (dialog.scNbRows.GetValue(), dialog.scNbColumns.GetValue())
+            nr = int(dialog.scNbRows.GetValue())
+            nc = int(dialog.scNbColumns.GetValue())
+            self.mplPanel.set_grid(nr, nc)
+            print "%s x %s grid has been defined" % (nr, nc)
         
         dialog.Destroy()
 

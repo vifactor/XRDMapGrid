@@ -4,6 +4,7 @@
 import wx
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
+import matplotlib.gridspec as gridspec
 
 # begin wxGlade: dependencies
 # end wxGlade
@@ -27,6 +28,8 @@ class MplPanel(wx.Panel):
         self.figure = Figure()
         # add figure to canvas
         self.canvas = FigureCanvas(self, wx.ID_ANY, self.figure)
+        #add gridspec
+        self.gridspec = None
 
     def __set_properties(self):
         # begin wxGlade: MplPanel.__set_properties
@@ -37,5 +40,15 @@ class MplPanel(wx.Panel):
         # begin wxGlade: MplPanel.__do_layout
         pass
         # end wxGlade
+    
+    def set_grid(self, nr, nc):
+        #setup gridspec with the number of rows and columns given
+        self.gridspec = gridspec.GridSpec(nr, nc)
+        #add axis to each cell of the gridspec
+        for i in range(nr*nc):
+            self.figure.add_subplot(self.gridspec[i])
+        
+        self.canvas.draw()
+        
 
 # end of class MplPanel
