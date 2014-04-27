@@ -20,14 +20,11 @@ class AxesGridDialog(wx.Dialog):
         self.scNbRows = wx.SpinCtrl(self, -1, "1", min=1, max=10)
         self.stNbColumns = wx.StaticText(self, -1, "Number of columns")
         self.scNbColumns = wx.SpinCtrl(self, -1, "1", min=1, max=10)
-        self.bCancel = wx.Button(self, -1, "Cancel")
-        self.bOK = wx.Button(self, -1, "OK")
+        self.bCancel = wx.Button(self, wx.ID_CANCEL, "Cancel")
+        self.bOK = wx.Button(self, wx.ID_OK, "OK")
 
         self.__set_properties()
         self.__do_layout()
-
-        self.Bind(wx.EVT_BUTTON, self.onCancel, self.bCancel)
-        self.Bind(wx.EVT_BUTTON, self.onOK, self.bOK)
         # end wxGlade
 
     def __set_properties(self):
@@ -52,13 +49,5 @@ class AxesGridDialog(wx.Dialog):
         sizer_1.Fit(self)
         self.Layout()
         # end wxGlade
-
-    def onCancel(self, event):  # wxGlade: AxesGridDialog.<event_handler>
-        print "Event handler `onCancel' not implemented!"
-        event.Skip()
-
-    def onOK(self, event):  # wxGlade: AxesGridDialog.<event_handler>
-        print "Event handler `onOK' not implemented!"
-        event.Skip()
 
 # end of class AxesGridDialog
