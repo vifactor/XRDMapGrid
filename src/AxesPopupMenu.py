@@ -3,6 +3,8 @@ import os
 import numpy as np
 import xrayutilities as xu
 
+from AxesPreferencesDialog import AxesPreferencesDialog
+
 class AxesPopupMenu(wx.Menu):
     def __init__(self, axes):
         wx.Menu.__init__(self)
@@ -46,8 +48,9 @@ class AxesPopupMenu(wx.Menu):
             self.axes.set_ylabel(r'$2\theta$ (deg)')
             
     def onSetPreferences(self, event):
-        print "SetPreferences handler not yet implemented"
-        event.Skip()
-        
+        dlg = AxesPreferencesDialog(None)
+        dlg.ShowModal()
+        dlg.Destroy()
+            
     def onClear(self, event):
         self.axes.clear()
