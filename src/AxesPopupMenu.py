@@ -17,6 +17,10 @@ class AxesPopupMenu(wx.Menu):
         self.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.onClear, item)
         
+        item = wx.MenuItem(self, wx.ID_PREFERENCES, "Preferences...")
+        self.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.onSetPreferences, item)
+        
     def onLoad(self, event):
         dlg = wx.FileDialog(None, "Choose a file", "", "", "*.xrdml", wx.OPEN)
         if dlg.ShowModal() == wx.ID_OK:
@@ -40,6 +44,10 @@ class AxesPopupMenu(wx.Menu):
             #annotate axes
             self.axes.set_xlabel(r'$\omega$ (deg)')
             self.axes.set_ylabel(r'$2\theta$ (deg)')
+            
+    def onSetPreferences(self, event):
+        print "SetPreferences handler not yet implemented"
+        event.Skip()
         
     def onClear(self, event):
         self.axes.clear()
