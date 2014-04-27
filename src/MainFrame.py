@@ -43,9 +43,7 @@ class MainFrame(wx.Frame):
         dialog = AxesGridDialog(self)
         
         if dialog.ShowModal() == wx.ID_OK:
-            print "Ok"
-        else:
-            print "Cancel"
+            print "%s x %s grid has been defined" % (dialog.scNbRows.GetValue(), dialog.scNbColumns.GetValue())
         
         dialog.Destroy()
         

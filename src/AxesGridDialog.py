@@ -14,7 +14,7 @@ import wx
 class AxesGridDialog(wx.Dialog):
     def __init__(self, *args, **kwds):
         # begin wxGlade: AxesGridDialog.__init__
-        kwds["style"] = wx.DEFAULT_DIALOG_STYLE | wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX
+        kwds["style"] = wx.DEFAULT_DIALOG_STYLE | wx.STAY_ON_TOP
         wx.Dialog.__init__(self, *args, **kwds)
         self.stNbRows = wx.StaticText(self, -1, "Number of rows")
         self.scNbRows = wx.SpinCtrl(self, -1, "1", min=1, max=10)
@@ -29,7 +29,7 @@ class AxesGridDialog(wx.Dialog):
 
     def __set_properties(self):
         # begin wxGlade: AxesGridDialog.__set_properties
-        self.SetTitle("Dialog")
+        self.SetTitle("Define axes grid")
         # end wxGlade
 
     def __do_layout(self):
