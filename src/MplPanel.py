@@ -64,4 +64,5 @@ class MplPanel(wx.Panel):
                 menu = AxesPopupMenu(event.inaxes)
                 self.PopupMenu(menu)
                 menu.Destroy()
+                self.canvas.draw()
 # end of class MplPanel
