@@ -31,25 +31,35 @@ class AxesPopupMenu(wx.Menu):
             dlg.Destroy()
             
             #read xrdml datafile
-            om, tt, psd = xu.io.getxrdml_map(path)
-                    
-            gridder = xu.Gridder2D(150,150)
-            gridder(om, tt, psd)
+            om, tt, intensity = xu.io.getxrdml_map(path)
+            
+            #hxrd transformator
+            Si = xu.materials.Si
+            hxrd = xu.HXRD(Si.Q(1,1,0),Si.Q(0,0,1))
+            
+            #transform angles to reciprocal points
+            [qx,qy,qz] = hxrd.Ang2Q(om, tt, delta=[0.0, 0.0])
+            
+            #grid scatter data points
+            gridder = xu.Gridder2D(100,100)
+            gridder(qy,qz, intensity)
             INT = xu.maplog(gridder.data.transpose(),6,0)
 
             #clear axes from previous drawing
             self.axes.clear()
 
             #draw rsm
-            cf = self.axes.contourf(gridder.xaxis, gridder.yaxis,INT,100,extend='min')
+            cf = self.axes.contourf(gridder.xaxis, gridder.yaxis, INT, 100, extend='min')
 
-            #annotate axes
-            self.axes.set_xlabel(r'$\omega$ (deg)')
-            self.axes.set_ylabel(r'$2\theta$ (deg)')
+            #annotate axis
+            self.axes.set_xlabel(r'$Q_{[110]}$ ($\AA^{-1}$)')
+            self.axes.set_ylabel(r'$Q_{[001]}$ ($\AA^{-1}$)')
             
     def onSetPreferences(self, event):
         dlg = AxesPreferencesDialog(None)
-        dlg.ShowModal()
+        if dlg.ShowModal() == wx.ID_OK:
+            aspect = float(dlg.slider_1.GetValue()) / 100.0
+            self.axes.set_aspect(aspect)
         dlg.Destroy()
             
     def onClear(self, event):
