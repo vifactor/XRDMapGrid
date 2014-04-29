@@ -3,7 +3,7 @@ import os
 import numpy as np
 import xrayutilities as xu
 
-from AxesPreferencesDialog import AxesPreferencesDialog
+from AxesDialog import AxesDialog
 
 class AxesPopupMenu(wx.Menu):
     def __init__(self, axes):
@@ -56,10 +56,9 @@ class AxesPopupMenu(wx.Menu):
             self.axes.set_ylabel(r'$Q_{[001]}$ ($\AA^{-1}$)')
             
     def onSetPreferences(self, event):
-        dlg = AxesPreferencesDialog(None)
+        dlg = AxesDialog(None)
         if dlg.ShowModal() == wx.ID_OK:
-            aspect = float(dlg.slider_1.GetValue()) / 100.0
-            self.axes.set_aspect(aspect)
+            print "OK"
         dlg.Destroy()
             
     def onClear(self, event):
