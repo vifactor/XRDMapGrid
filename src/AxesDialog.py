@@ -20,17 +20,17 @@ class AxesDialog(wx.Dialog):
         self.paneSize_n_Position = wx.Panel(self.notebook_1, -1)
         self.label_7_copy = wx.StaticText(self.paneSize_n_Position, -1, "Move")
         self.label_12 = wx.StaticText(self.paneSize_n_Position, -1, "Left")
-        self.text_ctrl_4_copy = wx.TextCtrl(self.paneSize_n_Position, -1, "")
+        self.tcLeft = wx.TextCtrl(self.paneSize_n_Position, -1, "")
         self.label_13 = wx.StaticText(self.paneSize_n_Position, -1, "Top")
-        self.text_ctrl_5_copy = wx.TextCtrl(self.paneSize_n_Position, -1, "")
+        self.tcTop = wx.TextCtrl(self.paneSize_n_Position, -1, "")
         self.label_11 = wx.StaticText(self.paneSize_n_Position, -1, "Resize")
         self.label_14 = wx.StaticText(self.paneSize_n_Position, -1, "Width")
-        self.text_ctrl_10 = wx.TextCtrl(self.paneSize_n_Position, -1, "")
+        self.tcWidth = wx.TextCtrl(self.paneSize_n_Position, -1, "")
         self.label_15 = wx.StaticText(self.paneSize_n_Position, -1, "Height")
-        self.text_ctrl_6_copy = wx.TextCtrl(self.paneSize_n_Position, -1, "")
+        self.tcHeight = wx.TextCtrl(self.paneSize_n_Position, -1, "")
         self.paneScale_n_Ticks = wx.Panel(self.notebook_1, -1)
         self.label_1_copy = wx.StaticText(self.paneScale_n_Ticks, -1, "Selection")
-        self.lbAxesSt = wx.ListBox(self.paneScale_n_Ticks, -1, choices=["Horizontal", "Vertical"], style=wx.LB_SINGLE)
+        self.lbScaleTicksAxes = wx.ListBox(self.paneScale_n_Ticks, -1, choices=["Horizontal", "Vertical"], style=wx.LB_SINGLE)
         self.label_8 = wx.StaticText(self.paneScale_n_Ticks, -1, "From")
         self.tcFrom = wx.TextCtrl(self.paneScale_n_Ticks, -1, "")
         self.label_9 = wx.StaticText(self.paneScale_n_Ticks, -1, "To")
@@ -45,7 +45,7 @@ class AxesDialog(wx.Dialog):
         self.tcMinorTicksNb = wx.TextCtrl(self.paneScale_n_Ticks, -1, "")
         self.paneTitle_n_Format = wx.Panel(self.notebook_1, -1)
         self.label_16 = wx.StaticText(self.paneTitle_n_Format, -1, "Selection")
-        self.list_box_1 = wx.ListBox(self.paneTitle_n_Format, -1, choices=["Horizontal", "Vertical"], style=wx.LB_SINGLE)
+        self.lbTitleFormatAxes = wx.ListBox(self.paneTitle_n_Format, -1, choices=["Horizontal", "Vertical"], style=wx.LB_SINGLE)
         self.lbTitle = wx.StaticText(self.paneTitle_n_Format, -1, "Title")
         self.tcTitle = wx.TextCtrl(self.paneTitle_n_Format, -1, "")
         self.panePalette_n_Style = wx.Panel(self.notebook_1, -1)
@@ -55,6 +55,12 @@ class AxesDialog(wx.Dialog):
 
         self.__set_properties()
         self.__do_layout()
+
+        self.Bind(wx.EVT_LISTBOX, self.onScaleTicksAxesSelect, self.lbScaleTicksAxes)
+        self.Bind(wx.EVT_RADIOBUTTON, self.onIncrementTicksSelect, self.rbTicksIncrement)
+        self.Bind(wx.EVT_RADIOBUTTON, self.onNbMajorTicksSelect, self.rbTicksNumber)
+        self.Bind(wx.EVT_LISTBOX, self.onTitleFormatAxesSelect, self.lbTitleFormatAxes)
+        self.Bind(wx.EVT_BUTTON, self.onApply, id=wx.ID_APPLY)
         # end wxGlade
 
     def __set_properties(self):
@@ -64,7 +70,7 @@ class AxesDialog(wx.Dialog):
         self.label_13.SetMinSize((55, 19))
         self.label_14.SetMinSize((55, 19))
         self.label_15.SetMinSize((55, 19))
-        self.lbAxesSt.SetSelection(0)
+        self.lbScaleTicksAxes.SetSelection(0)
         self.label_8.SetMinSize((50, 19))
         self.label_9.SetMinSize((50, 19))
         self.rbTicksIncrement.SetMinSize((20, 21))
@@ -76,14 +82,14 @@ class AxesDialog(wx.Dialog):
         self.label_10.SetMinSize((130, 19))
         self.label_10.Enable(False)
         self.tcMinorTicksNb.Enable(False)
-        self.list_box_1.SetSelection(0)
+        self.lbTitleFormatAxes.SetSelection(0)
         self.bOK_copy.SetFocus()
         # end wxGlade
 
     def __do_layout(self):
         # begin wxGlade: AxesDialog.__do_layout
-        sizer_1_copy = wx.BoxSizer(wx.VERTICAL)
-        sizer_2_copy = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_1 = wx.BoxSizer(wx.VERTICAL)
+        sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_27 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_28 = wx.BoxSizer(wx.VERTICAL)
         sizer_29 = wx.BoxSizer(wx.HORIZONTAL)
@@ -98,7 +104,7 @@ class AxesDialog(wx.Dialog):
         sizer_16_copy = wx.BoxSizer(wx.HORIZONTAL)
         sizer_4_copy = wx.BoxSizer(wx.VERTICAL)
         sizer_11 = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_13_copy = wx.BoxSizer(wx.VERTICAL)
+        sizer_13 = wx.BoxSizer(wx.VERTICAL)
         sizer_22 = wx.BoxSizer(wx.VERTICAL)
         sizer_26 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_25 = wx.BoxSizer(wx.HORIZONTAL)
@@ -108,25 +114,25 @@ class AxesDialog(wx.Dialog):
         sizer_23 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_12.Add(self.label_7_copy, 0, wx.LEFT, 5)
         sizer_23.Add(self.label_12, 0, wx.ALIGN_CENTER_VERTICAL, 0)
-        sizer_23.Add(self.text_ctrl_4_copy, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL, 5)
+        sizer_23.Add(self.tcLeft, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL, 5)
         sizer_14_copy.Add(sizer_23, 0, wx.LEFT | wx.TOP | wx.EXPAND, 10)
         sizer_24.Add(self.label_13, 0, wx.ALIGN_CENTER_VERTICAL, 0)
-        sizer_24.Add(self.text_ctrl_5_copy, 0, wx.LEFT, 5)
+        sizer_24.Add(self.tcTop, 0, wx.LEFT, 5)
         sizer_14_copy.Add(sizer_24, 0, wx.LEFT | wx.EXPAND, 10)
         sizer_12.Add(sizer_14_copy, 0, wx.EXPAND, 0)
         sizer_11.Add(sizer_12, 1, wx.EXPAND, 0)
-        sizer_13_copy.Add(self.label_11, 0, wx.LEFT, 5)
+        sizer_13.Add(self.label_11, 0, wx.LEFT, 5)
         sizer_25.Add(self.label_14, 0, wx.ALIGN_CENTER_VERTICAL, 0)
-        sizer_25.Add(self.text_ctrl_10, 0, wx.LEFT, 5)
+        sizer_25.Add(self.tcWidth, 0, wx.LEFT, 5)
         sizer_22.Add(sizer_25, 0, wx.LEFT | wx.TOP | wx.EXPAND, 10)
         sizer_26.Add(self.label_15, 0, wx.ALIGN_CENTER_VERTICAL, 0)
-        sizer_26.Add(self.text_ctrl_6_copy, 0, wx.LEFT, 5)
+        sizer_26.Add(self.tcHeight, 0, wx.LEFT, 5)
         sizer_22.Add(sizer_26, 0, wx.LEFT | wx.EXPAND, 10)
-        sizer_13_copy.Add(sizer_22, 0, wx.EXPAND, 0)
-        sizer_11.Add(sizer_13_copy, 1, wx.EXPAND, 0)
+        sizer_13.Add(sizer_22, 0, wx.EXPAND, 0)
+        sizer_11.Add(sizer_13, 1, wx.EXPAND, 0)
         self.paneSize_n_Position.SetSizer(sizer_11)
         sizer_4_copy.Add(self.label_1_copy, 0, wx.EXPAND | wx.ALIGN_BOTTOM, 0)
-        sizer_4_copy.Add(self.lbAxesSt, 0, wx.EXPAND | wx.ALIGN_BOTTOM | wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_4_copy.Add(self.lbScaleTicksAxes, 0, wx.EXPAND | wx.ALIGN_BOTTOM | wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_3_copy.Add(sizer_4_copy, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_16_copy.Add(self.label_8, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_16_copy.Add(self.tcFrom, 0, wx.ALIGN_CENTER_VERTICAL, 0)
@@ -150,7 +156,7 @@ class AxesDialog(wx.Dialog):
         sizer_3_copy.Add(sizer_18, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         self.paneScale_n_Ticks.SetSizer(sizer_3_copy)
         sizer_30.Add(self.label_16, 0, 0, 0)
-        sizer_30.Add(self.list_box_1, 0, wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_30.Add(self.lbTitleFormatAxes, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_27.Add(sizer_30, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_29.Add(self.lbTitle, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_29.Add(self.tcTitle, 1, wx.LEFT | wx.EXPAND, 10)
@@ -161,15 +167,35 @@ class AxesDialog(wx.Dialog):
         self.notebook_1.AddPage(self.paneScale_n_Ticks, "Scale/Ticks")
         self.notebook_1.AddPage(self.paneTitle_n_Format, "Title/Format")
         self.notebook_1.AddPage(self.panePalette_n_Style, "Palette/Style")
-        sizer_1_copy.Add(self.notebook_1, 1, wx.EXPAND, 0)
-        sizer_2_copy.Add((300, 20), 0, 0, 0)
-        sizer_2_copy.Add(self.bCancel_copy, 0, wx.ALIGN_RIGHT, 0)
-        sizer_2_copy.Add(self.bApply_copy, 0, wx.ALIGN_RIGHT, 0)
-        sizer_2_copy.Add(self.bOK_copy, 0, wx.ALIGN_RIGHT, 0)
-        sizer_1_copy.Add(sizer_2_copy, 0, wx.EXPAND, 0)
-        self.SetSizer(sizer_1_copy)
-        sizer_1_copy.Fit(self)
+        sizer_1.Add(self.notebook_1, 1, wx.EXPAND, 0)
+        sizer_2.Add((300, 20), 0, 0, 0)
+        sizer_2.Add(self.bCancel_copy, 0, wx.ALIGN_RIGHT, 0)
+        sizer_2.Add(self.bApply_copy, 0, wx.ALIGN_RIGHT, 0)
+        sizer_2.Add(self.bOK_copy, 0, wx.ALIGN_RIGHT, 0)
+        sizer_1.Add(sizer_2, 0, wx.EXPAND, 0)
+        self.SetSizer(sizer_1)
+        sizer_1.Fit(self)
         self.Layout()
         # end wxGlade
+
+    def onScaleTicksAxesSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
+        print "Event handler `onScaleTicksAxesSelect' not implemented"
+        event.Skip()
+
+    def onIncrementTicksSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
+        print "Event handler `onIncrementTicksSelect' not implemented"
+        event.Skip()
+
+    def onNbMajorTicksSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
+        print "Event handler `onNbMajorTicksSelect' not implemented"
+        event.Skip()
+
+    def onTitleFormatAxesSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
+        print "Event handler `onTitleFormatAxesSelect' not implemented"
+        event.Skip()
+
+    def onApply(self, event):  # wxGlade: AxesDialog.<event_handler>
+        print "Event handler `onApply' not implemented"
+        event.Skip()
 
 # end of class AxesDialog
