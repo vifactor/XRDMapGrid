@@ -283,5 +283,8 @@ class AxesDialog(wx.Dialog):
         self.axes.set_position([x0, y0, width, height])
             
         self.initialize(self.figure, self.axes)
+        
+        #update figure
+        self.figure.canvas.draw()
 
 # end of class AxesDialog
