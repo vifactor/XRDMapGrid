@@ -57,8 +57,8 @@ class AxesPopupMenu(wx.Menu):
             
     def onSetPreferences(self, event):
         dlg = AxesDialog(None)
-        if dlg.ShowModal() == wx.ID_OK:
-            print "OK"
+        dlg.initialize(self.axes)
+        dlg.ShowModal()
         dlg.Destroy()
             
     def onClear(self, event):

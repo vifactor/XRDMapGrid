@@ -36,12 +36,12 @@ class AxesDialog(wx.Dialog):
         self.label_9 = wx.StaticText(self.paneScale_n_Ticks, -1, "To")
         self.tcTo = wx.TextCtrl(self.paneScale_n_Ticks, -1, "")
         self.rbTicksIncrement = wx.RadioButton(self.paneScale_n_Ticks, -1, "")
-        self.label_10_copy_1 = wx.StaticText(self.paneScale_n_Ticks, -1, "Increment", style=wx.ALIGN_RIGHT)
+        self.lbTicksIncrement = wx.StaticText(self.paneScale_n_Ticks, -1, "Increment", style=wx.ALIGN_RIGHT)
         self.tcTicksIncrement = wx.TextCtrl(self.paneScale_n_Ticks, -1, "")
         self.rbTicksNumber = wx.RadioButton(self.paneScale_n_Ticks, -1, "")
-        self.label_10_copy = wx.StaticText(self.paneScale_n_Ticks, -1, "Major ticks", style=wx.ALIGN_RIGHT)
+        self.lbMajorTicksNb = wx.StaticText(self.paneScale_n_Ticks, -1, "Major ticks", style=wx.ALIGN_RIGHT)
         self.tcMajorTicksNb = wx.TextCtrl(self.paneScale_n_Ticks, -1, "")
-        self.label_10 = wx.StaticText(self.paneScale_n_Ticks, -1, "Minor ticks", style=wx.ALIGN_RIGHT)
+        self.lbMinorTicksNb = wx.StaticText(self.paneScale_n_Ticks, -1, "Minor ticks", style=wx.ALIGN_RIGHT)
         self.tcMinorTicksNb = wx.TextCtrl(self.paneScale_n_Ticks, -1, "")
         self.paneTitle_n_Format = wx.Panel(self.notebook_1, -1)
         self.label_16 = wx.StaticText(self.paneTitle_n_Format, -1, "Selection")
@@ -74,14 +74,12 @@ class AxesDialog(wx.Dialog):
         self.label_8.SetMinSize((50, 19))
         self.label_9.SetMinSize((50, 19))
         self.rbTicksIncrement.SetMinSize((20, 21))
-        self.label_10_copy_1.SetMinSize((130, 19))
+        self.lbTicksIncrement.SetMinSize((130, 19))
         self.rbTicksNumber.SetMinSize((20, 21))
-        self.label_10_copy.SetMinSize((130, 19))
-        self.label_10_copy.Enable(False)
+        self.lbMajorTicksNb.SetMinSize((130, 19))
+        self.lbMajorTicksNb.Enable(False)
         self.tcMajorTicksNb.Enable(False)
-        self.label_10.SetMinSize((130, 19))
-        self.label_10.Enable(False)
-        self.tcMinorTicksNb.Enable(False)
+        self.lbMinorTicksNb.SetMinSize((130, 19))
         self.lbTitleFormatAxes.SetSelection(0)
         self.bOK_copy.SetFocus()
         # end wxGlade
@@ -142,15 +140,15 @@ class AxesDialog(wx.Dialog):
         sizer_15_copy.Add(sizer_17_copy, 0, wx.EXPAND, 0)
         sizer_3_copy.Add(sizer_15_copy, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_19.Add(self.rbTicksIncrement, 0, wx.ALIGN_CENTER_VERTICAL, 0)
-        sizer_19.Add(self.label_10_copy_1, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_19.Add(self.lbTicksIncrement, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_19.Add(self.tcTicksIncrement, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_18.Add(sizer_19, 0, wx.EXPAND, 0)
         sizer_20.Add(self.rbTicksNumber, 0, wx.ALIGN_CENTER_VERTICAL, 0)
-        sizer_20.Add(self.label_10_copy, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_20.Add(self.lbMajorTicksNb, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_20.Add(self.tcMajorTicksNb, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_18.Add(sizer_20, 0, wx.TOP | wx.EXPAND, 10)
         sizer_21.Add((20, 21), 0, wx.ALIGN_CENTER_VERTICAL, 0)
-        sizer_21.Add(self.label_10, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_21.Add(self.lbMinorTicksNb, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_21.Add(self.tcMinorTicksNb, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_18.Add(sizer_21, 0, wx.EXPAND, 0)
         sizer_3_copy.Add(sizer_18, 0, wx.ALIGN_CENTER_VERTICAL, 0)
@@ -177,25 +175,100 @@ class AxesDialog(wx.Dialog):
         sizer_1.Fit(self)
         self.Layout()
         # end wxGlade
-
+    
+    def initialize(self, axes):
+        self.axes = axes
+        
+        #set selection to x axis
+        self.lbScaleTicksAxes.SetSelection(0)
+        #initialize x-axis limits
+        [xmin, xmax] = self.axes.get_xlim()
+        self.tcFrom.SetValue("%.3f" % xmin)
+        self.tcTo.SetValue("%.3f" % xmax)
+        #initialize ticks
+        nbMajTicks = len(self.axes.get_xmajorticklabels())
+        nbMinTicks = len(self.axes.get_xminorticklabels())
+        self.tcMajorTicksNb.SetValue("%d" % nbMajTicks)
+        self.tcMinorTicksNb.SetValue("%d" % nbMinTicks)
+        
+        #set selection to x axis
+        self.lbTitleFormatAxes.SetSelection(0)
+        #initialize axis title
+        label = self.axes.get_xlabel()
+        self.tcTitle.SetValue(label)
+        
+        #get axes position and size
+        bbox = self.axes.get_position()
+        x0, y0, width, height = bbox.bounds
+        #initilize axes position
+        self.tcLeft.SetValue("%.3f" % x0)
+        self.tcTop.SetValue("%.3f" % y0)
+        #initialize axes size
+        self.tcWidth.SetValue("%.3f" % width)
+        self.tcHeight.SetValue("%.3f" % height)
+        
+                
     def onScaleTicksAxesSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
-        print "Event handler `onScaleTicksAxesSelect' not implemented"
-        event.Skip()
-
+        if self.lbScaleTicksAxes.GetSelection() == 0: #horizontal axis
+            [xmin, xmax] = self.axes.get_xlim()
+            self.tcFrom.SetValue("%.3f" % xmin)
+            self.tcTo.SetValue("%.3f" % xmax)
+        elif self.lbScaleTicksAxes.GetSelection() == 1: #vertical axis
+            [ymin, ymax] = self.axes.get_ylim()
+            self.tcFrom.SetValue("%.3f" % ymin)
+            self.tcTo.SetValue("%.3f" % ymax)
+    
     def onIncrementTicksSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
-        print "Event handler `onIncrementTicksSelect' not implemented"
-        event.Skip()
-
+        #enable ticks increment
+        self.lbTicksIncrement.Enable(True)
+        self.tcTicksIncrement.Enable(True)
+        #if ticks increment selected, nb of ticks should be disabled
+        self.lbMajorTicksNb.Enable(False)
+        self.tcMajorTicksNb.Enable(False)
+        
+    
     def onNbMajorTicksSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
-        print "Event handler `onNbMajorTicksSelect' not implemented"
-        event.Skip()
-
+        #enable number of ticks
+        self.lbMajorTicksNb.Enable(True)
+        self.tcMajorTicksNb.Enable(True)
+        #if ticks number of increment selected, ticks increment should be disabled
+        self.lbTicksIncrement.Enable(False)
+        self.tcTicksIncrement.Enable(False)
+    
     def onTitleFormatAxesSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
-        print "Event handler `onTitleFormatAxesSelect' not implemented"
-        event.Skip()
-
+        if self.lbTitleFormatAxes.GetSelection() == 0: #horizontal axis
+            label = self.axes.get_xlabel()
+            self.tcTitle.SetValue(label)
+        elif self.lbTitleFormatAxes.GetSelection() == 1: #vertical axis
+            label = self.axes.get_ylabel()
+            self.tcTitle.SetValue(label)
+            
     def onApply(self, event):  # wxGlade: AxesDialog.<event_handler>
-        print "Event handler `onApply' not implemented"
-        event.Skip()
+        if self.lbTitleFormatAxes.GetSelection() == 0: #horizontal axis
+            label = self.tcTitle.GetValue()
+            self.axes.set_xlabel(label)
+        elif self.lbTitleFormatAxes.GetSelection() == 1: #vertical axis
+            label = self.tcTitle.GetValue()
+            self.axes.set_ylabel(label)
+       
+        if self.lbScaleTicksAxes.GetSelection() == 0: #horizontal axis
+            xmin = float(self.tcFrom.GetValue())
+            xmax = float(self.tcTo.GetValue())
+            self.axes.set_xlim(xmin, xmax)
+        elif self.lbScaleTicksAxes.GetSelection() == 1: #vertical axis
+            ymin = float(self.tcFrom.GetValue())
+            ymax = float(self.tcTo.GetValue())
+            self.axes.set_ylim(ymin, ymax)
+            
+        #axes position
+        x0 = float(self.tcLeft.GetValue())
+        y0 = float(self.tcTop.GetValue())
+        #axes size
+        width = float(self.tcWidth.GetValue())
+        height = float(self.tcHeight.GetValue())
+        #update axes
+        self.axes.set_position([x0, y0, width, height])
+            
+        self.initialize(self.axes)
 
 # end of class AxesDialog
