@@ -60,7 +60,7 @@ class MplPanel(wx.Panel):
         if event.button == 3:
             #only if click happened inside axes
             if event.inaxes:
-                menu = AxesPopupMenu(event.inaxes)
+                menu = AxesPopupMenu(self.figure, event.inaxes)
                 self.PopupMenu(menu)
                 menu.Destroy()
                 self.canvas.draw()

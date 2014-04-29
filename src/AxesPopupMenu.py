@@ -6,7 +6,7 @@ import xrayutilities as xu
 from AxesDialog import AxesDialog
 
 class AxesPopupMenu(wx.Menu):
-    def __init__(self, axes):
+    def __init__(self, fig, axes):
         wx.Menu.__init__(self)
         
         self.axes = axes
