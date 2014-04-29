@@ -6,10 +6,11 @@ import xrayutilities as xu
 from AxesDialog import AxesDialog
 
 class AxesPopupMenu(wx.Menu):
-    def __init__(self, fig, axes):
+    def __init__(self, figure, axes):
         wx.Menu.__init__(self)
         
         self.axes = axes
+        self.figure = figure
         
         item = wx.MenuItem(self, wx.ID_OPEN, "Load file...")
         self.AppendItem(item)
@@ -57,7 +58,7 @@ class AxesPopupMenu(wx.Menu):
             
     def onSetPreferences(self, event):
         dlg = AxesDialog(None)
-        dlg.initialize(self.axes)
+        dlg.initialize(self.figure, self.axes)
         dlg.ShowModal()
         dlg.Destroy()
             

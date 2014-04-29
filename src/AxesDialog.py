@@ -182,8 +182,9 @@ class AxesDialog(wx.Dialog):
         self.Layout()
         # end wxGlade
     
-    def initialize(self, axes):
+    def initialize(self, figure, axes):
         self.axes = axes
+        self.figure = figure
         
         #set selection to x axis
         self.lbScaleTicksAxes.SetSelection(0)
@@ -275,6 +276,6 @@ class AxesDialog(wx.Dialog):
         #update axes
         self.axes.set_position([x0, y0, width, height])
             
-        self.initialize(self.axes)
+        self.initialize(self.figure, self.axes)
 
 # end of class AxesDialog
