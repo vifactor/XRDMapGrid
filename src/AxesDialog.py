@@ -63,6 +63,7 @@ class AxesDialog(wx.Dialog):
         self.Bind(wx.EVT_RADIOBUTTON, self.onIncrementTicksSelect, self.rbTicksIncrement)
         self.Bind(wx.EVT_RADIOBUTTON, self.onNbMajorTicksSelect, self.rbTicksNumber)
         self.Bind(wx.EVT_LISTBOX, self.onTitleFormatAxesSelect, self.lbTitleFormatAxes)
+        self.Bind(wx.EVT_CHECKBOX, self.onTitleLabelCheck, self.cbShowTitleLabels)
         self.Bind(wx.EVT_BUTTON, self.onApply, id=wx.ID_APPLY)
         # end wxGlade
 
@@ -302,5 +303,9 @@ class AxesDialog(wx.Dialog):
         
         #update figure
         self.figure.canvas.draw()
+
+    def onTitleLabelCheck(self, event):  # wxGlade: AxesDialog.<event_handler>
+        print "Event handler `onTitleLabelCheck' not implemented"
+        event.Skip()
 
 # end of class AxesDialog
