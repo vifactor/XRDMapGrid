@@ -186,23 +186,37 @@ class AxesDialog(wx.Dialog):
         self.axes = axes
         self.figure = figure
         
-        #set selection to x axis
-        self.lbScaleTicksAxes.SetSelection(0)
-        #initialize x-axis limits
-        [xmin, xmax] = self.axes.get_xlim()
-        self.tcFrom.SetValue("%.3f" % xmin)
-        self.tcTo.SetValue("%.3f" % xmax)
-        #initialize ticks
-        nbMajTicks = len(self.axes.get_xmajorticklabels())
-        nbMinTicks = len(self.axes.get_xminorticklabels())
-        self.tcMajorTicksNb.SetValue("%d" % nbMajTicks)
-        self.tcMinorTicksNb.SetValue("%d" % nbMinTicks)
+        if self.lbScaleTicksAxes.GetSelection() == 0:#if horizontal axis selected
+            #initialize x-axis limits
+            [xmin, xmax] = self.axes.get_xlim()
+            self.tcFrom.SetValue("%.3f" % xmin)
+            self.tcTo.SetValue("%.3f" % xmax)
+            
+            #display x ticks
+            nbMajTicks = len(self.axes.get_xmajorticklabels())
+            nbMinTicks = len(self.axes.get_xminorticklabels())
+            self.tcMajorTicksNb.SetValue("%d" % nbMajTicks)
+            self.tcMinorTicksNb.SetValue("%d" % nbMinTicks)
+        elif self.lbScaleTicksAxes.GetSelection() == 1:#if horizontal axis selected:
+            #initialize y-axis limits
+            [ymin, ymax] = self.axes.get_ylim()
+            self.tcFrom.SetValue("%.3f" % ymin)
+            self.tcTo.SetValue("%.3f" % ymax)
+            
+            #display y ticks
+            nbMajTicks = len(self.axes.get_ymajorticklabels())
+            nbMinTicks = len(self.axes.get_yminorticklabels())
+            self.tcMajorTicksNb.SetValue("%d" % nbMajTicks)
+            self.tcMinorTicksNb.SetValue("%d" % nbMinTicks)
         
-        #set selection to x axis
-        self.lbTitleFormatAxes.SetSelection(0)
-        #initialize axis title
-        label = self.axes.get_xlabel()
-        self.tcTitle.SetValue(label)
+        if self.lbTitleFormatAxes.GetSelection() == 0:
+            #display x axis lable
+            label = self.axes.get_xlabel()
+            self.tcTitle.SetValue(label)
+        elif self.lbTitleFormatAxes.GetSelection() == 1:
+            #display x axis lable
+            label = self.axes.get_ylabel()
+            self.tcTitle.SetValue(label)
         
         #get axes position and size
         bbox = self.axes.get_position()
@@ -219,7 +233,6 @@ class AxesDialog(wx.Dialog):
         #initialize axes sizes in inches
         self.tcWidth_cm.SetValue("%.3f" % width)
         self.tcHeight_cm.SetValue("%.3f" % height)
-        
                 
     def onScaleTicksAxesSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
         if self.lbScaleTicksAxes.GetSelection() == 0: #horizontal axis
