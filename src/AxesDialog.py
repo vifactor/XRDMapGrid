@@ -305,7 +305,30 @@ class AxesDialog(wx.Dialog):
         self.figure.canvas.draw()
 
     def onTitleLabelCheck(self, event):  # wxGlade: AxesDialog.<event_handler>
-        print "Event handler `onTitleLabelCheck' not implemented"
-        event.Skip()
+        if event.IsChecked():
+            #show controling widgets
+            self.lbTitle.Show()
+            self.tcTitle.Show()
+            
+            if self.lbTitleFormatAxes.GetSelection() == 0:
+                #hide x axis
+                self.axes.get_xaxis().set_visible(True)
+            elif self.lbTitleFormatAxes.GetSelection() == 1:
+                #hide y axis lable
+                self.axes.get_yaxis().set_visible(True)
+        else:
+            #hide controling widgets
+            self.lbTitle.Hide()
+            self.tcTitle.Hide()
+            
+            if self.lbTitleFormatAxes.GetSelection() == 0:
+                #hide x axis
+                self.axes.set_xticklabels([])
+                #self.axes.get_xaxis().set_visible(False)
+            elif self.lbTitleFormatAxes.GetSelection() == 1:
+                #hide y axis lable
+                self.axes.get_yaxis().set_visible(False)
+        
+        self.figure.canvas.draw()
 
 # end of class AxesDialog
