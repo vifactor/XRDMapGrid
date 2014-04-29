@@ -213,6 +213,12 @@ class AxesDialog(wx.Dialog):
         #initialize axes size
         self.tcWidth.SetValue("%.3f" % width)
         self.tcHeight.SetValue("%.3f" % height)
+        #get axes size in inches
+        bbox = self.axes.get_window_extent().transformed(self.figure.dpi_scale_trans.inverted())
+        width, height = bbox.width, bbox.height
+        #initialize axes sizes in inches
+        self.tcWidth_cm.SetValue("%.3f" % width)
+        self.tcHeight_cm.SetValue("%.3f" % height)
         
                 
     def onScaleTicksAxesSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
