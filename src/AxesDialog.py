@@ -45,9 +45,10 @@ class AxesDialog(wx.Dialog):
         self.tcMajorTicksNb = wx.TextCtrl(self.paneScale_n_Ticks, -1, "")
         self.lbMinorTicksNb = wx.StaticText(self.paneScale_n_Ticks, -1, "Minor ticks", style=wx.ALIGN_RIGHT)
         self.tcMinorTicksNb = wx.TextCtrl(self.paneScale_n_Ticks, -1, "")
-        self.paneTitle_n_Format = wx.Panel(self.notebook_1, -1)
+        self.paneTitle_n_Format = wx.Panel(self.notebook_1, wx.ID_ANY)
         self.label_16 = wx.StaticText(self.paneTitle_n_Format, -1, "Selection")
         self.lbTitleFormatAxes = wx.ListBox(self.paneTitle_n_Format, -1, choices=["Horizontal", "Vertical"], style=wx.LB_SINGLE)
+        self.cbShowTitleLabels = wx.CheckBox(self.paneTitle_n_Format, -1, "Show title and labels")
         self.lbTitle = wx.StaticText(self.paneTitle_n_Format, -1, "Title")
         self.tcTitle = wx.TextCtrl(self.paneTitle_n_Format, -1, "")
         self.panePalette_n_Style = wx.Panel(self.notebook_1, -1)
@@ -85,6 +86,7 @@ class AxesDialog(wx.Dialog):
         self.tcMajorTicksNb.Enable(False)
         self.lbMinorTicksNb.SetMinSize((130, 19))
         self.lbTitleFormatAxes.SetSelection(0)
+        self.cbShowTitleLabels.SetValue(1)
         self.bOK_copy.SetFocus()
         # end wxGlade
 
@@ -162,6 +164,7 @@ class AxesDialog(wx.Dialog):
         sizer_30.Add(self.label_16, 0, 0, 0)
         sizer_30.Add(self.lbTitleFormatAxes, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_27.Add(sizer_30, 0, wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_28.Add(self.cbShowTitleLabels, 0, 0, 0)
         sizer_29.Add(self.lbTitle, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_29.Add(self.tcTitle, 1, wx.LEFT | wx.EXPAND, 10)
         sizer_28.Add(sizer_29, 0, wx.EXPAND, 0)
