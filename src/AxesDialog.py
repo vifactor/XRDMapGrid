@@ -48,7 +48,7 @@ class AxesDialog(wx.Dialog):
         self.paneTitle_n_Format = wx.Panel(self.notebook_1, wx.ID_ANY)
         self.label_16 = wx.StaticText(self.paneTitle_n_Format, -1, "Selection")
         self.lbTitleFormatAxes = wx.ListBox(self.paneTitle_n_Format, -1, choices=["Horizontal", "Vertical"], style=wx.LB_SINGLE)
-        self.cbShowTitleLabels = wx.CheckBox(self.paneTitle_n_Format, -1, "Show title and labels")
+        self.cbShowLabels = wx.CheckBox(self.paneTitle_n_Format, -1, "Show labels")
         self.lbTitle = wx.StaticText(self.paneTitle_n_Format, -1, "Title")
         self.tcTitle = wx.TextCtrl(self.paneTitle_n_Format, -1, "")
         self.panePalette_n_Style = wx.Panel(self.notebook_1, -1)
@@ -63,13 +63,14 @@ class AxesDialog(wx.Dialog):
         self.Bind(wx.EVT_RADIOBUTTON, self.onIncrementTicksSelect, self.rbTicksIncrement)
         self.Bind(wx.EVT_RADIOBUTTON, self.onNbMajorTicksSelect, self.rbTicksNumber)
         self.Bind(wx.EVT_LISTBOX, self.onTitleFormatAxesSelect, self.lbTitleFormatAxes)
-        self.Bind(wx.EVT_CHECKBOX, self.onTitleLabelCheck, self.cbShowTitleLabels)
+        self.Bind(wx.EVT_CHECKBOX, self.onLabelCheck, self.cbShowLabels)
         self.Bind(wx.EVT_BUTTON, self.onApply, id=wx.ID_APPLY)
         # end wxGlade
 
     def __set_properties(self):
         # begin wxGlade: AxesDialog.__set_properties
         self.SetTitle("Axes settings")
+        self.SetSize((656, 200))
         self.label_12.SetMinSize((55, 19))
         self.label_13.SetMinSize((55, 19))
         self.label_14.SetMinSize((55, 19))
@@ -87,7 +88,7 @@ class AxesDialog(wx.Dialog):
         self.tcMajorTicksNb.Enable(False)
         self.lbMinorTicksNb.SetMinSize((130, 19))
         self.lbTitleFormatAxes.SetSelection(0)
-        self.cbShowTitleLabels.SetValue(1)
+        self.cbShowLabels.SetValue(1)
         self.bOK_copy.SetFocus()
         # end wxGlade
 
@@ -165,7 +166,7 @@ class AxesDialog(wx.Dialog):
         sizer_30.Add(self.label_16, 0, 0, 0)
         sizer_30.Add(self.lbTitleFormatAxes, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_27.Add(sizer_30, 0, wx.ALIGN_CENTER_VERTICAL, 0)
-        sizer_28.Add(self.cbShowTitleLabels, 0, 0, 0)
+        sizer_28.Add(self.cbShowLabels, 0, 0, 0)
         sizer_29.Add(self.lbTitle, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_29.Add(self.tcTitle, 1, wx.LEFT | wx.EXPAND, 10)
         sizer_28.Add(sizer_29, 0, wx.EXPAND, 0)
@@ -182,7 +183,6 @@ class AxesDialog(wx.Dialog):
         sizer_2.Add(self.bOK_copy, 0, wx.ALIGN_RIGHT, 0)
         sizer_1.Add(sizer_2, 0, wx.EXPAND, 0)
         self.SetSizer(sizer_1)
-        sizer_1.Fit(self)
         self.Layout()
         # end wxGlade
     
@@ -304,31 +304,26 @@ class AxesDialog(wx.Dialog):
         #update figure
         self.figure.canvas.draw()
 
-    def onTitleLabelCheck(self, event):  # wxGlade: AxesDialog.<event_handler>
-        if event.IsChecked():
-            #show controling widgets
-            self.lbTitle.Show()
-            self.tcTitle.Show()
-            
+    def onLabelCheck(self, event):  # wxGlade: AxesDialog.<event_handler>
+        if event.IsChecked():            
             if self.lbTitleFormatAxes.GetSelection() == 0:
                 #hide x axis
-                self.axes.get_xaxis().set_visible(True)
+                self.axes.tick_params(axis='x', reset = True) # reset labels
+
             elif self.lbTitleFormatAxes.GetSelection() == 1:
                 #hide y axis lable
-                self.axes.get_yaxis().set_visible(True)
+                self.axes.tick_params(axis='y', reset = True) # reset labels
         else:
-            #hide controling widgets
-            self.lbTitle.Hide()
-            self.tcTitle.Hide()
-            
             if self.lbTitleFormatAxes.GetSelection() == 0:
-                #hide x axis
-                self.axes.set_xticklabels([])
-                #self.axes.get_xaxis().set_visible(False)
+                #hide x axis label and title
+                self.axes.tick_params(\
+                    axis='x',          # changes apply to the x-axis
+                    labelbottom='off') # labels along the bottom edge are off
             elif self.lbTitleFormatAxes.GetSelection() == 1:
-                #hide y axis lable
-                self.axes.get_yaxis().set_visible(False)
-        
+                #hide y axis lable title
+                self.axes.tick_params(\
+                    axis='y',          # changes apply to the x-axis
+                    labelleft='off') # labels along the left edge are off
         self.figure.canvas.draw()
 
 # end of class AxesDialog
