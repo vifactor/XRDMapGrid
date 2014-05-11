@@ -22,6 +22,8 @@ class MainFrame(wx.Frame):
         # Menu Bar
         self.menubar = wx.MenuBar()
         self.File = wx.Menu()
+        self.Save = wx.MenuItem(self.File, wx.ID_SAVE, "&Save", "Have current figure", wx.ITEM_NORMAL)
+        self.File.AppendItem(self.Save)
         self.Exit = wx.MenuItem(self.File, wx.ID_EXIT, "E&xit", "Terminate the program", wx.ITEM_NORMAL)
         self.File.AppendItem(self.Exit)
         self.menubar.Append(self.File, "&File")
@@ -40,6 +42,7 @@ class MainFrame(wx.Frame):
         self.__set_properties()
         self.__do_layout()
 
+        self.Bind(wx.EVT_MENU, self.onSave, self.Save)
         self.Bind(wx.EVT_MENU, self.onExit, self.Exit)
         self.Bind(wx.EVT_MENU, self.onSetGrid, self.SetGrid)
         self.Bind(wx.EVT_MENU, self.onAbout, self.About)
@@ -78,5 +81,23 @@ class MainFrame(wx.Frame):
             print "%s x %s grid has been defined" % (nr, nc)
         
         dialog.Destroy()
+
+    def onSave(self, event):  # wxGlade: MainFrame.<event_handler>
+        if self.mplPanel.figure.get_axes():#if there is 
+            #split file into base part and extension part
+            base = "figure"
+            
+            #propose to save file with the same base as input file but with qfit extension
+            dlg = wx.FileDialog(self, "Save image", "", base + '.eps',
+                            "*.*", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+            if dlg.ShowModal() == wx.ID_OK:
+                # save content in the file
+                path = dlg.GetPath()
+                self.mplPanel.figure.savefig(path)
+        else:
+            #Create a message dialog box
+            dlg = wx.MessageDialog(self, "Figure is empty", "Worning", wx.OK)
+            dlg.ShowModal()
+            dlg.Destroy()
 
 # end of class MainFrame
