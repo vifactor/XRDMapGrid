@@ -52,6 +52,12 @@ class AxesDialog(wx.Dialog):
         self.lbTitle = wx.StaticText(self.paneTitle_n_Format, -1, "Title")
         self.tcTitle = wx.TextCtrl(self.paneTitle_n_Format, -1, "")
         self.panePalette_n_Style = wx.Panel(self.notebook_1, -1)
+        self.label_6 = wx.StaticText(self.panePalette_n_Style, -1, "Gridder")
+        self.label_17 = wx.StaticText(self.panePalette_n_Style, -1, "X sampling")
+        self.spXSamp = wx.SpinCtrl(self.panePalette_n_Style, -1, "25", min=0, max=200)
+        self.label_18 = wx.StaticText(self.panePalette_n_Style, -1, "Y sampling")
+        self.spYSamp = wx.SpinCtrl(self.panePalette_n_Style, -1, "25", min=0, max=200)
+        self.label_19 = wx.StaticText(self.panePalette_n_Style, -1, "Here will be pallete settings", style=wx.ALIGN_CENTRE)
         self.bCancel_copy = wx.Button(self, wx.ID_CANCEL, "Cancel")
         self.bApply_copy = wx.Button(self, wx.ID_APPLY, "Apply")
         self.bOK_copy = wx.Button(self, wx.ID_OK, "OK")
@@ -89,6 +95,7 @@ class AxesDialog(wx.Dialog):
         self.lbMinorTicksNb.SetMinSize((130, 19))
         self.lbTitleFormatAxes.SetSelection(0)
         self.cbShowLabels.SetValue(1)
+        self.label_6.SetFont(wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Sans"))
         self.bOK_copy.SetFocus()
         # end wxGlade
 
@@ -96,6 +103,11 @@ class AxesDialog(wx.Dialog):
         # begin wxGlade: AxesDialog.__do_layout
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
         sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_16 = wx.BoxSizer(wx.VERTICAL)
+        sizer_31 = wx.BoxSizer(wx.VERTICAL)
+        sizer_32 = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_34 = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_33 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_27 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_28 = wx.BoxSizer(wx.VERTICAL)
         sizer_29 = wx.BoxSizer(wx.HORIZONTAL)
@@ -172,6 +184,17 @@ class AxesDialog(wx.Dialog):
         sizer_28.Add(sizer_29, 0, wx.EXPAND, 0)
         sizer_27.Add(sizer_28, 1, wx.ALIGN_CENTER_VERTICAL, 0)
         self.paneTitle_n_Format.SetSizer(sizer_27)
+        sizer_31.Add(self.label_6, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_33.Add(self.label_17, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_33.Add(self.spXSamp, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_32.Add(sizer_33, 0, wx.LEFT, 5)
+        sizer_34.Add(self.label_18, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_34.Add(self.spYSamp, 0, 0, 0)
+        sizer_32.Add(sizer_34, 0, wx.LEFT, 5)
+        sizer_31.Add(sizer_32, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_16.Add(sizer_31, 0, 0, 0)
+        sizer_16.Add(self.label_19, 1, wx.EXPAND, 0)
+        self.panePalette_n_Style.SetSizer(sizer_16)
         self.notebook_1.AddPage(self.paneSize_n_Position, "Size/Position")
         self.notebook_1.AddPage(self.paneScale_n_Ticks, "Scale/Ticks")
         self.notebook_1.AddPage(self.paneTitle_n_Format, "Title/Format")
@@ -186,9 +209,10 @@ class AxesDialog(wx.Dialog):
         self.Layout()
         # end wxGlade
     
-    def initialize(self, figure, axes):
+    def initialize(self, figure, axes, gridder):
         self.axes = axes
         self.figure = figure
+        self.gridder = gridder
         
         if self.lbScaleTicksAxes.GetSelection() == 0:#if horizontal axis selected
             #initialize x-axis limits
@@ -237,6 +261,10 @@ class AxesDialog(wx.Dialog):
         #initialize axes sizes in inches
         self.tcWidth_cm.SetValue("%.3f" % width)
         self.tcHeight_cm.SetValue("%.3f" % height)
+        
+        #gridder samplings
+        self.spXSamp.SetValue(self.gridder.nx)
+        self.spYSamp.SetValue(self.gridder.ny)
                 
     def onScaleTicksAxesSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
         if self.lbScaleTicksAxes.GetSelection() == 0: #horizontal axis
@@ -298,8 +326,13 @@ class AxesDialog(wx.Dialog):
         height = float(self.tcHeight.GetValue())
         #update axes
         self.axes.set_position([x0, y0, width, height])
+        
+        nx = int(self.spXSamp.GetValue())
+        ny = int(self.spYSamp.GetValue())
+        self.gridder.SetResolution(nx, ny)
             
-        self.initialize(self.figure, self.axes)
+        self.initialize(self.figure, self.axes, self.gridder)
+        
         
         #update figure
         self.figure.canvas.draw()

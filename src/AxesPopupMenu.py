@@ -103,7 +103,7 @@ class AxesPopupMenu(wx.Menu):
     
     def onSetPreferences(self, event):
         dlg = AxesDialog(None)
-        dlg.initialize(self.figure, self.axes)
+        dlg.initialize(self.figure, self.axes, self.gridder)
         dlg.ShowModal()
         dlg.Destroy()
             

@@ -216,4 +216,20 @@ class CSVDialog(wx.Dialog):
         self.dialect.skipinitialspace = event.IsChecked()
         self.UpdateGrid()
 
+    def onDelimChange(self, event):  # wxGlade: CSVDialog.<event_handler>
+        print "Event handler `onDelimChange' not implemented"
+        event.Skip()
+
+    def onEnterCommenChar(self, event):  # wxGlade: CSVDialog.<event_handler>
+        print "Event handler `onEnterCommenChar' not implemented"
+        event.Skip()
+
+    def onCheckSkipInitSpace(self, event):  # wxGlade: CSVDialog.<event_handler>
+        print "Event handler `onCheckSkipInitSpace' not implemented"
+        event.Skip()
+
+    def onSpin(self, event):  # wxGlade: CSVDialog.<event_handler>
+        print "Event handler `onSpin' not implemented"
+        event.Skip()
+
 # end of class CSVDialog
