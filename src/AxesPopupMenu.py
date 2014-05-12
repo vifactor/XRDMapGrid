@@ -7,11 +7,13 @@ from AxesDialog import AxesDialog
 from CSVDialog import CSVDialog
 
 class AxesPopupMenu(wx.Menu):
-    def __init__(self, figure, axes):
+    def __init__(self, figure, axes, gridder):
         wx.Menu.__init__(self)
         
         self.axes = axes
         self.figure = figure
+        #gridder to grid 2d-data
+        self.gridder = gridder
         
         item = wx.MenuItem(self, wx.ID_OPEN, "Load file...")
         self.AppendItem(item)
@@ -51,15 +53,14 @@ class AxesPopupMenu(wx.Menu):
         [qx,qy,qz] = hxrd.Ang2Q(om, tt, delta=[0.0, 0.0])
             
         #grid scatter data points
-        gridder = xu.Gridder2D(100,100)
-        gridder(qy,qz, intensity)
-        INT = xu.maplog(gridder.data.transpose(),6,0)
+        self.gridder(qy,qz, intensity)
+        INT = xu.maplog(self.gridder.data.transpose(),6,0)
 
         #clear axes from previous drawing
         self.axes.clear()
 
         #draw rsm
-        cf = self.axes.contourf(gridder.xaxis, gridder.yaxis, INT, 100, extend='min')
+        cf = self.axes.contourf(self.gridder.xaxis, self.gridder.yaxis, INT, 100, extend='min')
 
         #annotate axis
         self.axes.set_xlabel(r'$Q_{[110]}$ ($\AA^{-1}$)')
@@ -91,15 +92,14 @@ class AxesPopupMenu(wx.Menu):
         dlg.Destroy()
         
         #grid scatter data points
-        gridder = xu.Gridder2D(30,30)
-        gridder(xarr, yarr, zarr)
-        INT = xu.maplog(gridder.data.transpose(),6,0)
+        self.gridder(xarr, yarr, zarr)
+        INT = xu.maplog(self.gridder.data.transpose(),6,0)
 
         #clear axes from previous drawing
         self.axes.clear()
 
         #draw data
-        cf = self.axes.contourf(gridder.xaxis, gridder.yaxis, INT, 100, extend='min')
+        cf = self.axes.contourf(self.gridder.xaxis, self.gridder.yaxis, INT, 100, extend='min')
     
     def onSetPreferences(self, event):
         dlg = AxesDialog(None)
