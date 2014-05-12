@@ -25,7 +25,9 @@ class AxesPopupMenu(wx.Menu):
         self.Bind(wx.EVT_MENU, self.onSetPreferences, item)
         
     def onLoad(self, event):
-        dlg = wx.FileDialog(None, "Choose a file", "", "", "*.xrdml", wx.OPEN)
+        dlg = wx.FileDialog(None, "Choose a file", "", "", 
+                    "XRDML files (*.xrdml)|*.xrdml",
+                    wx.OPEN)
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             #destroy dialog
