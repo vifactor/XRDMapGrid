@@ -7,6 +7,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 import matplotlib.gridspec as gridspec
 
 from AxesPopupMenu import AxesPopupMenu
+from CustomMplAxes import CustomMplAxes
 import xrayutilities as xu
 
 # begin wxGlade: dependencies
@@ -54,7 +55,8 @@ class MplPanel(wx.Panel):
         self.gridspec = gridspec.GridSpec(nr, nc)
         #add axis to each cell of the gridspec
         for i in range(nr*nc):
-            self.figure.add_subplot(self.gridspec[i])
+            #instead of built in Axes, create CustomMplAxes
+            self.figure.add_subplot(self.gridspec[i], projection="CustomMplAxes")
         
         self.canvas.draw()
     
