@@ -52,19 +52,11 @@ class AxesPopupMenu(wx.Menu):
         #transform angles to reciprocal points
         [qx,qy,qz] = hxrd.Ang2Q(om, tt, delta=[0.0, 0.0])
             
-        #grid scatter data points
-        self.gridder(qy,qz, intensity)
-        INT = xu.maplog(self.gridder.data.transpose(),6,0)
-
         #clear axes from previous drawing
         self.axes.clear()
 
         #draw rsm
-        cf = self.axes.contourf(self.gridder.xaxis, self.gridder.yaxis, INT, 100, extend='min')
-
-        #annotate axis
-        self.axes.set_xlabel(r'$Q_{[110]}$ ($\AA^{-1}$)')
-        self.axes.set_ylabel(r'$Q_{[001]}$ ($\AA^{-1}$)')
+        self.axes.rsm(qy,qz, intensity)
     
     def loadCSV(self, path):
         dlg = CSVDialog(None)
@@ -87,19 +79,15 @@ class AxesPopupMenu(wx.Menu):
                             zarr.append(float(row[data_cols[2]]))
                         except IndexError as e:
                             print("Line %d: %s in %s" % (reader.line_num, row, e))
+                            #clear axes from previous drawing
+                self.axes.clear()
+
+                #draw data
+                self.axes.rsm(xarr, yarr, zarr)
                 except csv.Error as e:
                     sys.exit('file %s, line %d: %s' % (filename, reader.line_num, e))
         dlg.Destroy()
         
-        #grid scatter data points
-        self.gridder(xarr, yarr, zarr)
-        INT = xu.maplog(self.gridder.data.transpose(),6,0)
-
-        #clear axes from previous drawing
-        self.axes.clear()
-
-        #draw data
-        cf = self.axes.contourf(self.gridder.xaxis, self.gridder.yaxis, INT, 100, extend='min')
     
     def onSetPreferences(self, event):
         dlg = AxesDialog(None)
