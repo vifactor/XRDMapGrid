@@ -7,13 +7,11 @@ from AxesDialog import AxesDialog
 from CSVDialog import CSVDialog
 
 class AxesPopupMenu(wx.Menu):
-    def __init__(self, figure, axes, gridder):
+    def __init__(self, figure, axes):
         wx.Menu.__init__(self)
         
         self.axes = axes
         self.figure = figure
-        #gridder to grid 2d-data
-        self.gridder = gridder
         
         item = wx.MenuItem(self, wx.ID_OPEN, "Load file...")
         self.AppendItem(item)
@@ -80,18 +78,19 @@ class AxesPopupMenu(wx.Menu):
                         except IndexError as e:
                             print("Line %d: %s in %s" % (reader.line_num, row, e))
                             #clear axes from previous drawing
-                self.axes.clear()
-
-                #draw data
-                self.axes.rsm(xarr, yarr, zarr)
                 except csv.Error as e:
                     sys.exit('file %s, line %d: %s' % (filename, reader.line_num, e))
+            self.axes.clear()
+
+            #draw data
+            self.axes.rsm(xarr, yarr, zarr)
+
         dlg.Destroy()
         
     
     def onSetPreferences(self, event):
         dlg = AxesDialog(None)
-        dlg.initialize(self.figure, self.axes, self.gridder)
+        dlg.initialize(self.figure, self.axes)
         dlg.ShowModal()
         dlg.Destroy()
             
