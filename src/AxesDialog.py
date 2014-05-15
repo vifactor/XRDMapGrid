@@ -328,7 +328,7 @@ class AxesDialog(wx.Dialog):
         
         nx = int(self.spXSamp.GetValue())
         ny = int(self.spYSamp.GetValue())
-        self.axes.gridder.SetResolution(nx, ny)
+        self.axes.set_gridder_resolution(nx, ny)
             
         self.initialize(self.figure, self.axes)
         

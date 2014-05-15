@@ -33,5 +33,17 @@ class CustomMplAxes(MplAxes):
         self.set_xlabel(r'$Q_{x}$')
         self.set_ylabel(r'$Q_{z}$')
         
+    def set_gridder_resolution(self, nx, ny):
+        #update gridder
+        self.gridder.SetResolution(nx, ny)
+        
+        #regrid data
+        self.gridder(self.Qx_data, self.Qz_data, self.Int_data)
+        LOGINT = xu.maplog(self.gridder.data.transpose(),6,0)
+
+        #draw rsm
+        self.cs = self.contourf(self.gridder.xaxis, self.gridder.yaxis, LOGINT, 25, extend='min')
+
+        
 #register new axes type
 register_projection(CustomMplAxes)
