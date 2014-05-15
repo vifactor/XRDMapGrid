@@ -57,7 +57,11 @@ class AxesDialog(wx.Dialog):
         self.spXSamp = wx.SpinCtrl(self.panePalette_n_Style, -1, "25", min=0, max=200)
         self.label_18 = wx.StaticText(self.panePalette_n_Style, -1, "Y sampling")
         self.spYSamp = wx.SpinCtrl(self.panePalette_n_Style, -1, "25", min=0, max=200)
-        self.label_19 = wx.StaticText(self.panePalette_n_Style, -1, "Here will be pallete settings", style=wx.ALIGN_CENTRE)
+        self.label_6_copy = wx.StaticText(self.panePalette_n_Style, -1, "Data limits")
+        self.label_19 = wx.StaticText(self.panePalette_n_Style, -1, "Min")
+        self.tcDataMin = wx.TextCtrl(self.panePalette_n_Style, -1, "")
+        self.label_20 = wx.StaticText(self.panePalette_n_Style, -1, "Max")
+        self.tcDataMax = wx.TextCtrl(self.panePalette_n_Style, -1, "")
         self.bCancel_copy = wx.Button(self, wx.ID_CANCEL, "Cancel")
         self.bApply_copy = wx.Button(self, wx.ID_APPLY, "Apply")
         self.bOK_copy = wx.Button(self, wx.ID_OK, "OK")
@@ -96,6 +100,7 @@ class AxesDialog(wx.Dialog):
         self.lbTitleFormatAxes.SetSelection(0)
         self.cbShowLabels.SetValue(1)
         self.label_6.SetFont(wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Sans"))
+        self.label_6_copy.SetFont(wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Sans"))
         self.bOK_copy.SetFocus()
         # end wxGlade
 
@@ -104,6 +109,10 @@ class AxesDialog(wx.Dialog):
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
         sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_16 = wx.BoxSizer(wx.VERTICAL)
+        sizer_17 = wx.BoxSizer(wx.VERTICAL)
+        sizer_35 = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_37 = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_36 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_31 = wx.BoxSizer(wx.VERTICAL)
         sizer_32 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_34 = wx.BoxSizer(wx.HORIZONTAL)
@@ -184,7 +193,7 @@ class AxesDialog(wx.Dialog):
         sizer_28.Add(sizer_29, 0, wx.EXPAND, 0)
         sizer_27.Add(sizer_28, 1, wx.ALIGN_CENTER_VERTICAL, 0)
         self.paneTitle_n_Format.SetSizer(sizer_27)
-        sizer_31.Add(self.label_6, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_31.Add(self.label_6, 0, wx.BOTTOM | wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 5)
         sizer_33.Add(self.label_17, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_33.Add(self.spXSamp, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_32.Add(sizer_33, 0, wx.LEFT, 5)
@@ -192,8 +201,16 @@ class AxesDialog(wx.Dialog):
         sizer_34.Add(self.spYSamp, 0, 0, 0)
         sizer_32.Add(sizer_34, 0, wx.LEFT, 5)
         sizer_31.Add(sizer_32, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
-        sizer_16.Add(sizer_31, 0, 0, 0)
-        sizer_16.Add(self.label_19, 1, wx.EXPAND, 0)
+        sizer_16.Add(sizer_31, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_17.Add(self.label_6_copy, 0, wx.BOTTOM | wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 5)
+        sizer_36.Add(self.label_19, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_36.Add(self.tcDataMin, 0, wx.LEFT, 5)
+        sizer_35.Add(sizer_36, 0, wx.EXPAND, 0)
+        sizer_37.Add(self.label_20, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_37.Add(self.tcDataMax, 0, wx.LEFT, 5)
+        sizer_35.Add(sizer_37, 0, wx.EXPAND, 0)
+        sizer_17.Add(sizer_35, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_16.Add(sizer_17, 1, wx.EXPAND, 0)
         self.panePalette_n_Style.SetSizer(sizer_16)
         self.notebook_1.AddPage(self.paneSize_n_Position, "Size/Position")
         self.notebook_1.AddPage(self.paneScale_n_Ticks, "Scale/Ticks")
@@ -261,6 +278,11 @@ class AxesDialog(wx.Dialog):
         #initialize axes sizes in inches
         self.tcWidth_cm.SetValue("%.3f" % width)
         self.tcHeight_cm.SetValue("%.3f" % height)
+        
+        #data limits TODO: cannot be implemented as it requires contourset
+        cmin = 0; cmax = 1
+        self.tcDataMin.SetValue("%.4f" % cmin)
+        self.tcDataMax.SetValue("%.4f" % cmax)
         
         #gridder samplings
         self.spXSamp.SetValue(self.gridder.nx)
