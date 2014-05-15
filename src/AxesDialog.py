@@ -226,10 +226,9 @@ class AxesDialog(wx.Dialog):
         self.Layout()
         # end wxGlade
     
-    def initialize(self, figure, axes, gridder):
+    def initialize(self, figure, axes):
         self.axes = axes
         self.figure = figure
-        self.gridder = gridder
         
         if self.lbScaleTicksAxes.GetSelection() == 0:#if horizontal axis selected
             #initialize x-axis limits
@@ -285,8 +284,8 @@ class AxesDialog(wx.Dialog):
         self.tcDataMax.SetValue("%.4f" % cmax)
         
         #gridder samplings
-        self.spXSamp.SetValue(self.gridder.nx)
-        self.spYSamp.SetValue(self.gridder.ny)
+        self.spXSamp.SetValue(self.axes.gridder.nx)
+        self.spYSamp.SetValue(self.axes.gridder.ny)
                 
     def onScaleTicksAxesSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
         if self.lbScaleTicksAxes.GetSelection() == 0: #horizontal axis
@@ -351,9 +350,9 @@ class AxesDialog(wx.Dialog):
         
         nx = int(self.spXSamp.GetValue())
         ny = int(self.spYSamp.GetValue())
-        self.gridder.SetResolution(nx, ny)
+        self.axes.set_gridder_resolution(nx, ny)
             
-        self.initialize(self.figure, self.axes, self.gridder)
+        self.initialize(self.figure, self.axes)
         
         
         #update figure

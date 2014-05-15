@@ -7,6 +7,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 import matplotlib.gridspec as gridspec
 
 from AxesPopupMenu import AxesPopupMenu
+from CustomMplAxes import CustomMplAxes
 import xrayutilities as xu
 
 # begin wxGlade: dependencies
@@ -32,8 +33,6 @@ class MplPanel(wx.Panel):
         #connect event for a popup menu
         self.cidrelease = self.canvas.mpl_connect(
             'button_release_event', self.on_right_release)
-        #define gridder
-        self.gridder = xu.Gridder2D(25, 25)
 
     def __set_properties(self):
         # begin wxGlade: MplPanel.__set_properties
@@ -54,7 +53,8 @@ class MplPanel(wx.Panel):
         self.gridspec = gridspec.GridSpec(nr, nc)
         #add axis to each cell of the gridspec
         for i in range(nr*nc):
-            self.figure.add_subplot(self.gridspec[i])
+            #instead of built in Axes, create CustomMplAxes
+            self.figure.add_subplot(self.gridspec[i], projection="CustomMplAxes")
         
         self.canvas.draw()
     
@@ -63,7 +63,7 @@ class MplPanel(wx.Panel):
         if event.button == 3:
             #only if click happened inside axes
             if event.inaxes:
-                menu = AxesPopupMenu(self.figure, event.inaxes, self.gridder)
+                menu = AxesPopupMenu(self.figure, event.inaxes)
                 self.PopupMenu(menu)
                 menu.Destroy()
                 self.canvas.draw()

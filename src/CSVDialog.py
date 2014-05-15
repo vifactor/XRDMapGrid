@@ -46,7 +46,7 @@ class CSVDialog(wx.Dialog):
         self.__do_layout()
 
         self.Bind(wx.EVT_COMBOBOX, self.onDelimChange, self.cbDelim)
-        self.Bind(wx.EVT_TEXT_ENTER, self.onEnterCommenChar, self.tcComment)
+        self.Bind(wx.EVT_TEXT_ENTER, self.onEnterCommentChar, self.tcComment)
         self.Bind(wx.EVT_CHECKBOX, self.onCheckSkipInitSpace, self.cbSkipInitSpace)
         self.Bind(wx.EVT_SPINCTRL, self.onSpin, self.spNbRows)
         # end wxGlade
@@ -122,12 +122,6 @@ class CSVDialog(wx.Dialog):
         sizer_4.Fit(self)
         self.Layout()
         # end wxGlade
-
-    def onSpin(self, event):  # wxGlade: MyDialog.<event_handler>
-        self.nbRows = int(self.spNbRows.GetValue())
-        self.ResizeGrid()
-        self.UpdateGrid()
-        self.UpdateControls()
     
     def process(self, path):
         self.path = path
@@ -197,7 +191,7 @@ class CSVDialog(wx.Dialog):
     def GetCommentChar(self):
         return self.commentchar
         
-    def onDelimChange(self, event):  # wxGlade: MyDialog.<event_handler>
+    def onDelimChange(self, event):  # wxGlade: CSVDialog.<event_handler>
         delim_dict = {
                      "<tab>": '\t',
                      "<doublecolon>": ':',
@@ -208,28 +202,19 @@ class CSVDialog(wx.Dialog):
         self.dialect.delimiter = delim_dict[event.GetString()]
         self.UpdateGrid()
 
-    def onEnterCommenChar(self, event):  # wxGlade: MyDialog.<event_handler>
+    def onEnterCommentChar(self, event):  # wxGlade: CSVDialog.<event_handler>
         self.commentchar = event.GetString()
         self.UpdateGrid()
 
-    def onCheckSkipInitSpace(self, event):  # wxGlade: MyDialog.<event_handler>
+    def onCheckSkipInitSpace(self, event):  # wxGlade: CSVDialog.<event_handler>
         self.dialect.skipinitialspace = event.IsChecked()
         self.UpdateGrid()
 
-    def onDelimChange(self, event):  # wxGlade: CSVDialog.<event_handler>
-        print "Event handler `onDelimChange' not implemented"
-        event.Skip()
-
-    def onEnterCommenChar(self, event):  # wxGlade: CSVDialog.<event_handler>
-        print "Event handler `onEnterCommenChar' not implemented"
-        event.Skip()
-
-    def onCheckSkipInitSpace(self, event):  # wxGlade: CSVDialog.<event_handler>
-        print "Event handler `onCheckSkipInitSpace' not implemented"
-        event.Skip()
-
     def onSpin(self, event):  # wxGlade: CSVDialog.<event_handler>
-        print "Event handler `onSpin' not implemented"
-        event.Skip()
+        self.nbRows = int(self.spNbRows.GetValue())
+        self.ResizeGrid()
+        self.UpdateGrid()
+        self.UpdateControls()
+
 
 # end of class CSVDialog
