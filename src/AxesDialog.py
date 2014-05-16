@@ -278,8 +278,8 @@ class AxesDialog(wx.Dialog):
         self.tcWidth_cm.SetValue("%.3f" % width)
         self.tcHeight_cm.SetValue("%.3f" % height)
         
-        #data limits TODO: cannot be implemented as it requires contourset
-        cmin = 0; cmax = 1
+        #data limits
+        cmin, cmax = self.axes.cs.get_clim()
         self.tcDataMin.SetValue("%.4f" % cmin)
         self.tcDataMax.SetValue("%.4f" % cmax)
         
@@ -348,12 +348,17 @@ class AxesDialog(wx.Dialog):
         #update axes
         self.axes.set_position([x0, y0, width, height])
         
+        #data limits
+        cmin = float(self.tcDataMin.GetValue())
+        cmax = float(self.tcDataMax.GetValue())
+        self.axes.set_data_limits(cmin, cmax)
+        
+        #gridder resolution
         nx = int(self.spXSamp.GetValue())
         ny = int(self.spYSamp.GetValue())
         self.axes.set_gridder_resolution(nx, ny)
             
         self.initialize(self.figure, self.axes)
-        
         
         #update figure
         self.figure.canvas.draw()

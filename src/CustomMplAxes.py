@@ -34,6 +34,7 @@ class CustomMplAxes(MplAxes):
         self.set_ylabel(r'$Q_{z}$')
         
     def set_gridder_resolution(self, nx, ny):
+        
         #update gridder
         self.gridder.SetResolution(nx, ny)
         
@@ -42,8 +43,14 @@ class CustomMplAxes(MplAxes):
         LOGINT = xu.maplog(self.gridder.data.transpose(),6,0)
 
         #draw rsm
+        cmin, cmax = self.cs.get_clim()
         self.cs = self.contourf(self.gridder.xaxis, self.gridder.yaxis, LOGINT, 25, extend='min')
-
+        self.cs.set_clim(cmin, cmax)
+    
+    def set_data_limits(self, cmin, cmax):
+        self.cs.set_clim(cmin, cmax)
+        #TODO if there is a colorbar, deal with it as well
+        
         
 #register new axes type
 register_projection(CustomMplAxes)
