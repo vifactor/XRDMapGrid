@@ -3,7 +3,7 @@
 
 import wx
 import matplotlib.font_manager
-
+from matplotlib.ticker import LinearLocator, MultipleLocator
 
 # begin wxGlade: dependencies
 # end wxGlade
@@ -44,10 +44,10 @@ class AxesDialog(wx.Dialog):
         self.tcTo = wx.TextCtrl(self.paneScale_n_Ticks, -1, "")
         self.rbTicksIncrement = wx.RadioButton(self.paneScale_n_Ticks, -1, "")
         self.lbTicksIncrement = wx.StaticText(self.paneScale_n_Ticks, -1, "Increment", style=wx.ALIGN_RIGHT)
-        self.tcTicksIncrement = wx.TextCtrl(self.paneScale_n_Ticks, -1, "")
+        self.tcTicksIncrement = wx.TextCtrl(self.paneScale_n_Ticks, -1, "", style=wx.TE_PROCESS_ENTER)
         self.rbTicksNumber = wx.RadioButton(self.paneScale_n_Ticks, -1, "")
         self.lbMajorTicksNb = wx.StaticText(self.paneScale_n_Ticks, -1, "Major ticks", style=wx.ALIGN_RIGHT)
-        self.tcMajorTicksNb = wx.TextCtrl(self.paneScale_n_Ticks, -1, "")
+        self.tcMajorTicksNb = wx.TextCtrl(self.paneScale_n_Ticks, -1, "", style=wx.TE_PROCESS_ENTER | wx.TE_PROCESS_TAB)
         self.lbMinorTicksNb = wx.StaticText(self.paneScale_n_Ticks, -1, "Minor ticks", style=wx.ALIGN_RIGHT)
         self.tcMinorTicksNb = wx.TextCtrl(self.paneScale_n_Ticks, -1, "")
         self.paneTitle_n_Format = wx.Panel(self.notebook_1, wx.ID_ANY)
@@ -85,7 +85,9 @@ class AxesDialog(wx.Dialog):
 
         self.Bind(wx.EVT_LISTBOX, self.onScaleTicksAxesSelect, self.lbScaleTicksAxes)
         self.Bind(wx.EVT_RADIOBUTTON, self.onIncrementTicksSelect, self.rbTicksIncrement)
+        self.Bind(wx.EVT_TEXT_ENTER, self.onIncrementChange, self.tcTicksIncrement)
         self.Bind(wx.EVT_RADIOBUTTON, self.onNbMajorTicksSelect, self.rbTicksNumber)
+        self.Bind(wx.EVT_TEXT_ENTER, self.onMajorTicksChange, self.tcMajorTicksNb)
         self.Bind(wx.EVT_LISTBOX, self.onTitleFormatAxesSelect, self.lbTitleFormatAxes)
         self.Bind(wx.EVT_CHECKBOX, self.onLabelCheck, self.cbShowLabels)
         self.Bind(wx.EVT_BUTTON, self.onApply, id=wx.ID_APPLY)
@@ -278,6 +280,8 @@ class AxesDialog(wx.Dialog):
     def initialize(self, figure, axes):
         self.axes = axes
         self.figure = figure
+        self.loc_x = self.axes.xaxis.get_major_locator()
+        self.loc_y = self.axes.yaxis.get_major_locator()
         
         if self.lbScaleTicksAxes.GetSelection() == 0:#if horizontal axis selected
             #initialize x-axis limits
@@ -286,6 +290,9 @@ class AxesDialog(wx.Dialog):
             self.tcTo.SetValue("%.3f" % xmax)
             
             #display x ticks
+            ticks = self.loc_x()
+            increment = (ticks[-1] - ticks[0]) / (len(ticks) - 1)
+            self.tcTicksIncrement.SetValue("%.3f" % increment)
             nbMajTicks = len(self.axes.get_xmajorticklabels())
             nbMinTicks = len(self.axes.get_xminorticklabels())
             self.tcMajorTicksNb.SetValue("%d" % nbMajTicks)
@@ -297,6 +304,9 @@ class AxesDialog(wx.Dialog):
             self.tcTo.SetValue("%.3f" % ymax)
             
             #display y ticks
+            ticks = self.loc_y()
+            increment = (ticks[-1] - ticks[0]) / (len(ticks) - 1)
+            self.tcTicksIncrement.SetValue("%.3f" % increment)
             nbMajTicks = len(self.axes.get_ymajorticklabels())
             nbMinTicks = len(self.axes.get_yminorticklabels())
             self.tcMajorTicksNb.SetValue("%d" % nbMajTicks)
@@ -350,12 +360,29 @@ class AxesDialog(wx.Dialog):
             [xmin, xmax] = self.axes.get_xlim()
             self.tcFrom.SetValue("%.3f" % xmin)
             self.tcTo.SetValue("%.3f" % xmax)
+            #display x ticks properties
+            ticks = self.loc_x()
+            increment = (ticks[-1] - ticks[0]) / (len(ticks) - 1)
+            self.tcTicksIncrement.SetValue("%.3f" % increment)
+            nbMajTicks = len(self.axes.get_xmajorticklabels())
+            nbMinTicks = len(self.axes.get_xminorticklabels())
+            self.tcMajorTicksNb.SetValue("%d" % nbMajTicks)
+            self.tcMinorTicksNb.SetValue("%d" % nbMinTicks)
         elif self.lbScaleTicksAxes.GetSelection() == 1: #vertical axis
             [ymin, ymax] = self.axes.get_ylim()
             self.tcFrom.SetValue("%.3f" % ymin)
             self.tcTo.SetValue("%.3f" % ymax)
+            #display y ticks properties
+            ticks = self.loc_y()
+            increment = (ticks[-1] - ticks[0]) / (len(ticks) - 1)
+            self.tcTicksIncrement.SetValue("%.3f" % increment)
+            nbMajTicks = len(self.axes.get_ymajorticklabels())
+            nbMinTicks = len(self.axes.get_yminorticklabels())
+            self.tcMajorTicksNb.SetValue("%d" % nbMajTicks)
+            self.tcMinorTicksNb.SetValue("%d" % nbMinTicks)
     
     def onIncrementTicksSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
+        from matplotlib.ticker import MultipleLocator
         #enable ticks increment
         self.lbTicksIncrement.Enable(True)
         self.tcTicksIncrement.Enable(True)
@@ -363,7 +390,6 @@ class AxesDialog(wx.Dialog):
         self.lbMajorTicksNb.Enable(False)
         self.tcMajorTicksNb.Enable(False)
         
-    
     def onNbMajorTicksSelect(self, event):  # wxGlade: AxesDialog.<event_handler>
         #enable number of ticks
         self.lbMajorTicksNb.Enable(True)
@@ -389,6 +415,8 @@ class AxesDialog(wx.Dialog):
             self.cbTitleFontWeight.SetValue(label.get_weight())
     
     def onApply(self, event):  # wxGlade: AxesDialog.<event_handler>
+        self.axes.xaxis.set_major_locator(self.loc_x)
+        self.axes.yaxis.set_major_locator(self.loc_y)
         if self.lbTitleFormatAxes.GetSelection() == 0: #horizontal axis
             label = self.axes.get_xaxis().get_label()
             label.set_text(self.tcTitle.GetValue())
@@ -458,5 +486,20 @@ class AxesDialog(wx.Dialog):
                     axis='y',          # changes apply to the x-axis
                     labelleft='off') # labels along the left edge are off
         self.figure.canvas.draw()
+
+    def onIncrementChange(self, event):  # wxGlade: AxesDialog.<event_handler>
+        increment = float(self.tcTicksIncrement.GetValue())
+        if self.lbScaleTicksAxes.GetSelection() == 0:
+            self.loc_x = MultipleLocator(increment)
+        elif self.lbScaleTicksAxes.GetSelection() == 1:
+            self.loc_y = MultipleLocator(increment)
+
+    def onMajorTicksChange(self, event):  # wxGlade: AxesDialog.<event_handler>
+        nbticks = int(self.tcMajorTicksNb.GetValue())
+        if self.lbScaleTicksAxes.GetSelection() == 0:
+            self.loc_x = LinearLocator(nbticks)
+        elif self.lbScaleTicksAxes.GetSelection() == 1:
+            self.loc_y = LinearLocator(nbticks)
+
 
 # end of class AxesDialog
