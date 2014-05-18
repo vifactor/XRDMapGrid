@@ -3,6 +3,7 @@ import os
 import numpy as np
 import xrayutilities as xu
 
+import cfg
 from AxesDialog import AxesDialog
 from CSVDialog import CSVDialog
 
@@ -26,11 +27,13 @@ class AxesPopupMenu(wx.Menu):
         self.Bind(wx.EVT_MENU, self.onSetPreferences, item)
         
     def onLoad(self, event):
-        dlg = wx.FileDialog(None, "Choose a file", "", "", 
+        dlg = wx.FileDialog(None, "Choose a file", cfg.USER_WORK_DIR, "", 
                     "All files (*.*)|*.*|XRDML files (*.xrdml)|*.xrdml|QFIT files (*.qfit)|*.qfit",
                     wx.OPEN|wx.FD_CHANGE_DIR)
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
+            #save path in the global variable
+            cfg.USER_WORK_DIR = dlg.GetDirectory()
             
             fileBase, fileExtension = os.path.splitext(path)
             if fileExtension == '.xrdml':
